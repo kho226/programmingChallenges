@@ -23,14 +23,14 @@ def detect_cycle(head):
 
     ret = False
     if not head: return ret
-        
+
     runner = head
     trailer = head
 
     while runner.next:
         runner = runner.next
-        if runner.val == trailer.val:return True
+        if runner.val == trailer.val:ret = True
         if runner.next: runner = runner.next
         trailer = trailer.next
 
-    return False
+    return ret
