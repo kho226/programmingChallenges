@@ -21,8 +21,8 @@ def max_heapify(i, heap):
 
     '''
     if i > capacity:return
-    l = 2i
-    r = 2i+1
+    l = 2i+1
+    r = 2i+2
     max = i if heap[i] > heap[r] else r
     max = max if heap[max] > heap[l] else l
     if max != i:
