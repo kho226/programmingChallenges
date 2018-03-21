@@ -52,7 +52,7 @@ class AVLTree(object):
 
     '''
     
-    def insert(root,val):
+    def insert(self,root,val):
         '''
             Author: Kyle Ong
             Date: 03/20/2018
@@ -62,12 +62,12 @@ class AVLTree(object):
 
         '''
         if not root: return TreeNode(val)
-        if key < root.val: root.left = self.insert(root.left)
-        else: root.right = self.insert(root.right)
+        elif val < root.val: root.left = self.insert(root.left,val)
+        else: root.right = self.insert(root.right,val)
 
         root.height = 1 + max(self.get_height(root.left),self.get_height(root.right))
 
-        load = self.get_load(root.left,root.right)
+        load = self.get_balance(root)
 
         if load > 1 and val > root.left.val: #left - right case
             root.left = self.left_rotate(root.left)
@@ -80,7 +80,7 @@ class AVLTree(object):
             root.right = self.right_rotate(root.right)
             return self.left_rotate(root)
     
-    return root
+        return root
 
     def left_rotate(self,x):
         '''
@@ -98,7 +98,7 @@ class AVLTree(object):
         y = x.right
         sub_tree = y.left
 
-        x.left = sub_tree
+        x.right = sub_tree
         y.left = x
 
         x.height = 1 + max(self.get_height(x.left),self.get_height(x.right))
@@ -125,7 +125,7 @@ class AVLTree(object):
         sub_tree = y.left
 
         y.right = x
-        x.right = sub_tree
+        x.left = sub_tree
 
         y.height = 1 + max(self.get_height(y.left),self.get_height(y.right))
         x.height = 1 + max(self.get_height(x.left), self.get_height(x.right))
@@ -164,7 +164,7 @@ class AVLTree(object):
             space: O(1)
         '''
         if not root: return 0
-        balance = self.get_height(x.left) - self.get_height(x.right)
+        balance = self.get_height(root.left) - self.get_height(root.right)
         return balance
         
     
@@ -187,4 +187,31 @@ class AVLTree(object):
         self.pre_order(root.left)
         self.pre_order(root.right)
 
+
+def main():
+    print("it's alive")
+    myTree = AVLTree()
+    root = None
+ 
+    root = myTree.insert(root, 10)
+    root = myTree.insert(root, 20)
+    root = myTree.insert(root, 30)
+    root = myTree.insert(root, 40)
+    root = myTree.insert(root, 50)
+    root = myTree.insert(root, 25)
+ 
+    """The constructed AVL Tree would be
+            30
+           /  \
+         20   40
+        /  \     \
+       10  25    50"""
+ 
+    # Preorder Traversal
+    print("Preorder traversal of the",
+      "constructed AVL tree is")
+    myTree.pre_order(root)
+    print()
     
+
+main()
