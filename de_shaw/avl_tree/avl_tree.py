@@ -27,7 +27,29 @@ class TreeNode(object):
         self.height = 1
 
 
-def insert(root,val):
+class AVLTree(object):
+    '''
+        Author:Kyle Ong
+        Date: 03/20/2018
+
+        AVL Tree implmentation
+        - [ ] insert
+        - [ ] left_rotate
+        - [ ] right_rotate
+        - [ ] get_height
+        - [ ] get_balance
+        - [ ] pre_order
+        - [ ] get_balance
+        - [ ] pre_order
+
+
+    '''
+
+    def __init__(object,val):
+        self.root = TreeNode(val)
+
+    
+    def insert(root,val):
     '''
         Author: Kyle Ong
         Date: 03/20/2018
@@ -56,3 +78,16 @@ def insert(root,val):
         return left_rotate(root)
     
     return root
+
+    def left_rotate(self,z):
+    
+    def right_rotate(self,z):
+    
+    def get_height(self,z):
+    
+    def get_balance(self,z):
+    
+    def pre_order(self,z):
+    
+
+    
