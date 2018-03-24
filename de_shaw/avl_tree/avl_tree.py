@@ -1,217 +1,128 @@
 '''
-    Author: Kyle Ong
-    Date: 03/20/2018
-
-    avl tree
-
-    insert: log(n)
-    left_rotate: O(1)
-    right_rotate: O(1)
-    get_height: O(1)
-    get_balance: O(1)
-    pre_order: (logn)
-
+    Author: Kyle Ong   
+    Date: 03/22/2018
+    
+    AVL Tree Class
+    
+    height ~> log(n)
+    
+    search ~> O(logn)
+    
 
 '''
 
 class TreeNode(object):
     '''
         Author: Kyle Ong
-        Date: 03/20/2018
-
+        Date: 03/22/2018
+        
         TreeNode Class
-
+    
     '''
     def __init__(self,val):
-        '''
-            Author: Kyle Ong
-            Date: 03/20/2018
-
-            Type: val: int
-        '''
         self.val = val
         self.left = None
         self.right = None
         self.height = 1
 
 
+
 class AVLTree(object):
     '''
-        Author:Kyle Ong
-        Date: 03/20/2018
-
-        AVL Tree implmentation
-        - [ ] insert
-        - [ ] left_rotate
-        - [ ] right_rotate
-        - [ ] get_height
-        - [ ] get_balance
-        - [ ] get_balance
-        - [ ] pre_order
-
-
+        Author: Kyle Ong
+        Date:03/22/2018 
+        
+        AVL Tree class
+        
+        insert()
+        get_height()
+        get_load()
+        left_rotate()
+        right_rotate()
+        pre_order()
+    
     '''
     
-    def insert(self,root,val):
-        '''
-            Author: Kyle Ong
-            Date: 03/20/2018
-
-            Type: root: TreeNode
-            Type: val: int
-
-        '''
-        if not root: return TreeNode(val)
-        elif val < root.val: root.left = self.insert(root.left,val)
-        else: root.right = self.insert(root.right,val)
-
+    def insert(self,key,root):
+        
+        if not root: return TreeNode(key)
+        elif key < root.val: root.left = self.insert(key,root.left)
+        else: root.right = self.insert(key,root.right)
+            
         root.height = 1 + max(self.get_height(root.left),self.get_height(root.right))
-
-        load = self.get_balance(root)
-
-        if load > 1 and val > root.left.val: #left - right case
+        
+        load = self.get_load(root)
+        
+        if (load > 1 and key < root.left.val): return self.right_rotate(root)
+        if (load > 1 and key > root.left.val):
             root.left = self.left_rotate(root.left)
             return self.right_rotate(root)
-        if load > 1 and val < root.left.val: #left - left case
-            return self.right_rotate(root)
-        if load < -1 and val > root.right.val: #right - right case
-            return self.left_rotate(root)
-        if load < -1 and val < root.right.val: #right - left case
+        if (load < -1 and key > root.right.val): return self.left_rotate(root)
+        if (load < -1 and key < root.right.val):
             root.right = self.right_rotate(root.right)
             return self.left_rotate(root)
-    
+        
         return root
-
+    
+    def get_height(self,node):
+        if not node: return 0
+        return node.height
+    
+    def get_load(self,node):
+        if not node: return 0
+        load = self.get_height(node.left) - self.get_height(node.right)
+        return load
+    
     def left_rotate(self,x):
-        '''
-            Author: Kyle Ong
-            Date: 03/21/2018
-
-            left rotate for avl tree
-
-            runtime: O(1)
-            space: O(1)
-
-            Type: x: TreeNode
-            Type: Return TreeNode
-        '''
         y = x.right
         sub_tree = y.left
-
-        x.right = sub_tree
+        
         y.left = x
-
+        x.right = sub_tree
+        
+        y.height = 1 + max(self.get_height(y.left),self.get_height(y.right))
         x.height = 1 + max(self.get_height(x.left),self.get_height(x.right))
-        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
-
+        
         return y
-
-
+    
     def right_rotate(self,x):
-        '''
-            Author: Kyle Ong
-            Date: 03/21/2018
-
-            right rotate for avl tree
-
-            runtime: O(1)
-            space: O(1)
-
-            Type: x: TreeNode
-            Type: Return: TreeNode
-
-        '''
+        
         y = x.left
-        sub_tree = y.left
-
+        sub_tree = y.right
+        
         y.right = x
         x.left = sub_tree
-
-        y.height = 1 + max(self.get_height(y.left),self.get_height(y.right))
-        x.height = 1 + max(self.get_height(x.left), self.get_height(x.right))
-
-        return y
-
-
-    def get_height(self,root):
-        '''
-            Author: Kyle Ong
-            Date: 03/21/2018
-
-            get_height for avl tree
-
-            Type: root: TreeNode
-            Type: Return: int
-
-            runtime:O(logn)
-            space:O(1)
-
-        '''
-        if not root: return 0
-        return root.height
-    
-    def get_balance(self,root):
-        '''
-            Author: Kyle Ong
-            Date: 03/21/2018
-
-            get_balance for avl tree
-
-            Type: root: TreeNode
-            Type: balance: int
-
-            runtime: O(logn)
-            space: O(1)
-        '''
-        if not root: return 0
-        balance = self.get_height(root.left) - self.get_height(root.right)
-        return balance
         
+        y.height = 1 + max(self.get_height(y.left),self.get_height(y.right))
+        x.height = 1 + max(self.get_height(x.left),self.get_height(x.right))
+        
+        return y
     
-    def pre_order(self,root):
-        '''
-            Author: Kyle Ong
-            Date: 03/21/2018
+    def pre_order(self,node):
+        
+        if not node: return
+        
+        print(node.val)
+        self.pre_order(node.left)
+        self.pre_order(node.right)
+        
 
-            pre_order for avl tree
-
-            runtime: O(logn)
-            space: O(1)
-
-            Type: root: TreeNode
-            Type: Return: None
-        '''
     
-        if not root: return
-        print("{0} ".format(root.val))
-        self.pre_order(root.left)
-        self.pre_order(root.right)
-
-
 def main():
-    print("it's alive")
-    myTree = AVLTree()
-    root = None
- 
-    root = myTree.insert(root, 10)
-    root = myTree.insert(root, 20)
-    root = myTree.insert(root, 30)
-    root = myTree.insert(root, 40)
-    root = myTree.insert(root, 50)
-    root = myTree.insert(root, 25)
- 
-    """The constructed AVL Tree would be
-            30
-           /  \
-         20   40
-        /  \     \
-       10  25    50"""
- 
-    # Preorder Traversal
-    print("Preorder traversal of the",
-      "constructed AVL tree is")
-    myTree.pre_order(root)
-    print()
+    tree = AVLTree()
     
-
+    root = None
+    
+    root = tree.insert(10,root)
+    root = tree.insert(20,root)
+    root = tree.insert(30,root)
+    root = tree.insert(40,root)
+    root = tree.insert(50,root)
+    root = tree.insert(25,root)
+    
+    
+    tree.pre_order(root)
+    #tree.pre_order(root)
+    
+    
 main()
